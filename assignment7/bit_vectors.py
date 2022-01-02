@@ -110,7 +110,7 @@ check_count()
 # Given two bit vectors, to compute their average:
 def int_average_v1(x, y):
     # raise Todo("exercise 3: please fill in the missing code.")
-    return (x & y) + ((x ^ y) >> 1)
+    return (x + y) / 2
 
 
 # To compute the correct result of integer average, we've
