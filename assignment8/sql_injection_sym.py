@@ -3,7 +3,6 @@ import z3
 from sqlalchemy import *
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -13,6 +12,7 @@ class Todo(Exception):
 
     def __repr__(self):
         return self.__str__()
+
 
 ############################################################
 # This is the symbolic execution facilities.
