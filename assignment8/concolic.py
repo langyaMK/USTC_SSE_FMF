@@ -9,7 +9,6 @@ from symbolic import check_cond, neg_exp, symbolic_expr, f1
 from concrete import interpret_expr
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -52,7 +51,9 @@ def concolic_stmt(memory, stmt):
         #
         # Your code here：
 
-        raise Todo("exercise 8: please fill in the missing code.")
+        # raise Todo("exercise 8: please fill in the missing code.")
+        memory.concrete_memory[stmt.var] = interpret_expr(memory, stmt.expr)
+        memory.symbolic_memory[stmt.var] = symbolic_expr(memory, stmt.expr)
 
     elif isinstance(stmt, StmtIf):
         # exercise 8: Deal with if-statement, recall that concolic execution will do the
@@ -60,7 +61,13 @@ def concolic_stmt(memory, stmt):
         #
         # Your code here：
 
-        raise Todo("exercise 8: please fill in the missing code.")
+        # raise Todo("exercise 8: please fill in the missing code.")
+        if interpret_expr(memory, stmt.expr):
+            memory.path_condition.append(symbolic_expr(memory, stmt.expr))
+            memory = concolic_stmts(memory, stmt.then_stmts)
+        else:
+            memory.path_condition.append(neg_exp(symbolic_expr(memory, stmt.expr)))
+            memory = concolic_stmts(memory, stmt.else_stmts)
 
     elif isinstance(stmt, StmtWhile):
         # exercise 9: Process the while-statement, what you need to do is execute the
@@ -71,7 +78,16 @@ def concolic_stmt(memory, stmt):
         #
         # Your code here：
 
-        raise Todo("exercise 9: please fill in the missing code.")
+        # raise Todo("exercise 9: please fill in the missing code.")
+        if interpret_expr(memory, stmt.expr):
+            memory.path_condition.append(
+                ExprBop(
+                    memory.symbolic_memory[stmt.expr.left.var],
+                    memory.symbolic_memory[stmt.expr.right.var],
+                    stmt.expr.bop))
+            concolic_stmts(memory, stmt.stmts)
+        else:
+            memory.path_condition.append(neg_exp(stmt.expr))
 
     return memory
 
