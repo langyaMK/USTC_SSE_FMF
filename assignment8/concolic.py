@@ -159,7 +159,7 @@ func_foo = Function("foo", ["x", "y"],
 
 
 if __name__ == '__main__':
-    # print(f1)
+    print(f1)
 
     # sample output(not the exactly output):
     # change the try_times as you want
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     # 	b = b
     # 	x = 1
     # 	y = 1 + 3
-    # concolic_executor(f1, [0, 0], try_times=3)
+    concolic_executor(f1, [0, 0], try_times=3)
     print(func_loop)
 
     # Should output:
