@@ -79,15 +79,14 @@ def concolic_stmt(memory, stmt):
         # Your code here：
 
         # raise Todo("exercise 9: please fill in the missing code.")
-        if interpret_expr(memory, stmt.expr):
+        while interpret_expr(memory, stmt.expr):
             memory.path_condition.append(
                 ExprBop(
                     memory.symbolic_memory[stmt.expr.left.var],
                     memory.symbolic_memory[stmt.expr.right.var],
                     stmt.expr.bop))
             concolic_stmts(memory, stmt.stmts)
-        else:
-            memory.path_condition.append(neg_exp(stmt.expr))
+        memory.path_condition.append(neg_exp(symbolic_expr(memory, stmt.expr)))
 
     return memory
 
@@ -160,7 +159,7 @@ func_foo = Function("foo", ["x", "y"],
 
 
 if __name__ == '__main__':
-    print(f1)
+    # print(f1)
 
     # sample output(not the exactly output):
     # change the try_times as you want
@@ -194,7 +193,7 @@ if __name__ == '__main__':
     # 	b = b
     # 	x = 1
     # 	y = 1 + 3
-    concolic_executor(f1, [0, 0], try_times=3)
+    # concolic_executor(f1, [0, 0], try_times=3)
     print(func_loop)
 
     # Should output:
