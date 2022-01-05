@@ -2,7 +2,6 @@ from enum import Enum
 from typing import List
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -12,6 +11,7 @@ class Todo(Exception):
 
     def __repr__(self):
         return self.__str__()
+
 
 ########################################
 # This bunch of code declare the syntax for the language MiniPy:
@@ -174,7 +174,9 @@ class Function:
         #
         # Your code here：
 
-        raise Todo("exercise 1: please fill in the missing code.")
+        # raise Todo("exercise 1: please fill in the missing code.")
+        return (f"def {self.name}({arg_str}):\n"
+                f"{stmts_str}")
 
 
 ###############################################
