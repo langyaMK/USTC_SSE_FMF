@@ -6,7 +6,6 @@ from z3 import *
 from mini_py import *
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -55,7 +54,15 @@ def symbolic_expr(memory, expr):
         #
         # Your code here：
 
-        raise Todo("exercise 6: please fill in the missing code.")
+        # raise Todo("exercise 6: please fill in the missing code.")
+        var = memory.symbolic_memory[expr.var]
+        if isinstance(var, ExprVar):
+            return ExprVar(var.var)
+        elif isinstance(var, ExprNum):
+            return symbolic_expr(memory, var)
+        elif str(var.left) == str(expr) or str(var.right) == str(expr):
+            return ExprBop(var.left, var.right, var.bop)
+        return ExprBop(symbolic_expr(memory, var.left), symbolic_expr(memory, var.right), var.bop)
 
     if isinstance(expr, ExprBop):
         left = symbolic_expr(memory, expr.left)
@@ -75,7 +82,18 @@ def symbolic_stmt(memory, stmt, rest_stmts, results):
         #
         # Your code here：
 
-        raise Todo("exercise 6: please fill in the missing code.")
+        # raise Todo("exercise 6: please fill in the missing code.")
+        rest_stmts_then = [i for i in stmt.then_stmts]
+        rest_stmts_else = [i for i in stmt.else_stmts]
+        for i in rest_stmts:
+            rest_stmts_then.append(i)
+            rest_stmts_else.append(i)
+        p1 = mp.Process(target=symbolic_stmts, args=(memory, rest_stmts_then, results, stmt.expr))
+        p2 = mp.Process(target=symbolic_stmts, args=(memory, rest_stmts_else, results, neg_exp(stmt.expr)))
+        p1.start()
+        p2.start()
+        p1.join()
+        p2.join()
 
 
 def symbolic_stmts(memory, stmts, results, condition=None):
@@ -151,6 +169,7 @@ def check_cond(memory, add_cond=None):
     check_result = solver.check()
 
     return check_result, solver
+
 
 ###############################
 # test function:

@@ -5,7 +5,6 @@ from collections import namedtuple
 from datetime import datetime
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -15,6 +14,7 @@ class Todo(Exception):
 
     def __repr__(self):
         return self.__str__()
+
 
 Timer = namedtuple('Timer', ('pid', 'time'))
 
