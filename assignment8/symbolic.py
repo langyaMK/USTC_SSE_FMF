@@ -55,14 +55,14 @@ def symbolic_expr(memory, expr):
         # Your code here：
 
         # raise Todo("exercise 6: please fill in the missing code.")
-        var = memory.symbolic_memory[expr.var]
-        if isinstance(var, ExprVar):
-            return ExprVar(var.var)
-        elif isinstance(var, ExprNum):
-            return symbolic_expr(memory, var)
-        elif str(var.left) == str(expr) or str(var.right) == str(expr):
-            return ExprBop(var.left, var.right, var.bop)
-        return ExprBop(symbolic_expr(memory, var.left), symbolic_expr(memory, var.right), var.bop)
+        expr_value = memory.symbolic_memory[expr.var]
+        if isinstance(expr_value, ExprVar):
+            return ExprVar(expr_value.var)
+        elif isinstance(expr_value, ExprNum):
+            return symbolic_expr(memory, expr_value)
+        elif str(expr_value.left) == str(expr) or str(expr_value.right) == str(expr):
+            return ExprBop(expr_value.left, expr_value.right, expr_value.bop)
+        return ExprBop(symbolic_expr(memory, expr_value.left), symbolic_expr(memory, expr_value.right), expr_value.bop)
 
     if isinstance(expr, ExprBop):
         left = symbolic_expr(memory, expr.left)
