@@ -5,7 +5,6 @@ from typing import Dict
 from mini_py import *
 
 
-
 class Todo(Exception):
     def __init__(self, msg):
         self.msg = msg
@@ -76,7 +75,17 @@ def interpret_stm(memory, stmt):
     #
     # Your code here：
 
-    raise Todo("exercise 3: please fill in the missing code.")
+    # raise Todo("exercise 3: please fill in the missing code.")
+    if isinstance(stmt, StmtAssign):
+        memory.concrete_memory[stmt.var] = interpret_expr(memory, stmt.expr)
+    elif isinstance(stmt, StmtIf):
+        if interpret_expr(memory, stmt.expr):
+            interpret_stmts(memory, stmt.then_stmts)
+        else:
+            interpret_stmts(memory, stmt.else_stmts)
+    elif isinstance(stmt, StmtWhile):
+        while interpret_expr(memory, stmt.expr):
+            interpret_stmts(memory, stmt.stmts)
     return memory
 
 
