@@ -133,7 +133,32 @@ def expr_2_z3(expr):
     #
     # Your code here：
 
-    raise Todo("exercise 7: please fill in the missing code.")
+    # raise Todo("exercise 7: please fill in the missing code.")
+    if isinstance(expr, ExprNum):
+        return expr.num
+    if isinstance(expr, ExprVar):
+        return Int(expr.var)
+    if isinstance(expr, ExprBop):
+        if expr.bop == Bop.ADD:
+            return expr_2_z3(expr.left) + expr_2_z3(expr.right)
+        elif expr.bop == Bop.MIN:
+            return expr_2_z3(expr.left) - expr_2_z3(expr.right)
+        elif expr.bop == Bop.MUL:
+            return expr_2_z3(expr.left) * expr_2_z3(expr.right)
+        elif expr.bop == Bop.DIV:
+            return expr_2_z3(expr.left) / expr_2_z3(expr.right)
+        elif expr.bop == Bop.EQ:
+            return expr_2_z3(expr.left) == expr_2_z3(expr.right)
+        elif expr.bop == Bop.NE:
+            return expr_2_z3(expr.left) != expr_2_z3(expr.right)
+        elif expr.bop == Bop.GT:
+            return expr_2_z3(expr.left) > expr_2_z3(expr.right)
+        elif expr.bop == Bop.GE:
+            return expr_2_z3(expr.left) >= expr_2_z3(expr.right)
+        elif expr.bop == Bop.LT:
+            return expr_2_z3(expr.left) < expr_2_z3(expr.right)
+        elif expr.bop == Bop.LE:
+            return expr_2_z3(expr.left) <= expr_2_z3(expr.right)
 
 
 # negate the condition
