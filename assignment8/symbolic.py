@@ -44,6 +44,13 @@ class Memory:
 #####################
 #  symbolic execution
 def symbolic_expr(memory, expr):
+    def find(expr, var):
+        if not isinstance(expr, ExprBop):
+            return False
+        if str(expr.left) == str(var) or str(expr.right) == str(var):
+            return True
+        return find(expr.left, var) or find(expr.right, var)
+
     if isinstance(expr, ExprNum):
         return expr
     if isinstance(expr, ExprVar):
@@ -60,8 +67,6 @@ def symbolic_expr(memory, expr):
             return expr_value
         elif isinstance(expr_value, ExprNum):
             return symbolic_expr(memory, expr_value)
-        # elif str(expr_value.left) == str(expr) or str(expr_value.right) == str(expr):
-        #     return ExprBop(expr_value.left, expr_value.right, expr_value.bop)
         elif find(expr_value, expr):
             return ExprBop(expr_value.left, expr_value.right, expr_value.bop)
         return ExprBop(symbolic_expr(memory, expr_value.left), symbolic_expr(memory, expr_value.right), expr_value.bop)
@@ -70,14 +75,6 @@ def symbolic_expr(memory, expr):
         left = symbolic_expr(memory, expr.left)
         right = symbolic_expr(memory, expr.right)
         return ExprBop(left, right, expr.bop)
-
-
-def find(expr, var):
-    if not isinstance(expr, ExprBop):
-        return False
-    if str(expr.left) == str(var) or str(expr.right) == str(var):
-        return True
-    return find(expr.left, var) or find(expr.right, var)
 
 
 def symbolic_stmt(memory, stmt, rest_stmts, results):
